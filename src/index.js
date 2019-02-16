@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Slider } from './Slider';
 import { toDollarFormat } from './toDollarFormat';
+import './App.scss';
 
 function App() {
   const min = 0;
@@ -10,43 +11,45 @@ function App() {
   const [amount, setAmount] = useState(minAmount);
 
   return (
-    <div
-      style={{
-        width: '50%',
-        fontFamily: 'Noto Sans, Helvetica Neue, Helvetica, Arial, sans-serif'
-      }}
-    >
-      <h2>Leanpub Pricing Slider</h2>
-      <p>Minimum Price: {toDollarFormat(minAmount)}</p>
+    <div className="app">
+      <nav>
+        <h2>Leanpub Pricing Slider</h2>
+      </nav>
 
-      <Slider
-        primary={true}
-        label="You Pay"
-        amount={amount}
-        min={min}
-        max={max}
-        onChange={amountPercentage => {
-          const chosenAmount = max * amountPercentage;
-          const minAmountPercentage = minAmount / max;
+      <div className="content">
+        <p>
+          Minimum Price: <span>{toDollarFormat(minAmount)}</span>
+        </p>
 
-          const newAmount =
-            amountPercentage > 1
-              ? max
-              : amountPercentage < minAmountPercentage
-              ? minAmount
-              : chosenAmount;
+        <Slider
+          primary={true}
+          label="You Pay"
+          amount={amount}
+          min={min}
+          max={max}
+          onChange={amountPercentage => {
+            const chosenAmount = max * amountPercentage;
+            const minAmountPercentage = minAmount / max;
 
-          setAmount(newAmount);
-        }}
-      />
+            const newAmount =
+              amountPercentage > 1
+                ? max
+                : amountPercentage < minAmountPercentage
+                ? minAmount
+                : chosenAmount;
 
-      <Slider
-        primary={false}
-        label="Author Earns"
-        amount={amount * 0.8}
-        min={min}
-        max={max}
-      />
+            setAmount(newAmount);
+          }}
+        />
+
+        <Slider
+          primary={false}
+          label="Author Earns"
+          amount={amount * 0.8}
+          min={min}
+          max={max}
+        />
+      </div>
     </div>
   );
 }
