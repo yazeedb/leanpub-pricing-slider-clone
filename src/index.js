@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Slider } from './Slider';
+import { toDollarFormat } from './toDollarFormat';
 
 function App() {
   const min = 0;
@@ -15,6 +16,8 @@ function App() {
         fontFamily: 'Noto Sans, Helvetica Neue, Helvetica, Arial, sans-serif'
       }}
     >
+      <p>Minimum Price: {toDollarFormat(minAmount)}</p>
+
       <Slider
         primary={true}
         label="You Pay"
