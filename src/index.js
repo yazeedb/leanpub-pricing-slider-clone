@@ -16,6 +16,7 @@ function App() {
         fontFamily: 'Noto Sans, Helvetica Neue, Helvetica, Arial, sans-serif'
       }}
     >
+      <h2>Leanpub Pricing Slider</h2>
       <p>Minimum Price: {toDollarFormat(minAmount)}</p>
 
       <Slider
