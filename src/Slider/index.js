@@ -1,5 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
-import { useMouseTracking } from './useMouseTracking';
+import React, { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import { toDollarFormat } from '../toDollarFormat';
 import './Slider.scss';
 
@@ -19,16 +18,13 @@ export const Slider = ({
   const sliderWrapperRef = useRef(null);
   const sliderHandleRef = useRef(null);
 
-  useLayoutEffect(
-    () => {
-      if (!sliderWrapperRef.current) {
-        return;
-      }
+  useLayoutEffect(() => {
+    if (!sliderWrapperRef.current) {
+      return;
+    }
 
-      setWrapperWidth(sliderWrapperRef.current.offsetWidth);
-    },
-    [wrapperWidth]
-  );
+    setWrapperWidth(sliderWrapperRef.current.offsetWidth);
+  }, [wrapperWidth]);
 
   const sliderHandleOffset = 15;
 
@@ -41,13 +37,23 @@ export const Slider = ({
     onChange(amountPercentage);
   };
 
-  useMouseTracking({
-    trackMouse,
-    onMove: updateSliderHandlePosition,
-    cleanupFunction: () => {
-      setTrackMouse(false);
+  useEffect(() => {
+    if (trackMouse === false) {
+      return;
     }
-  });
+
+    const stopTrackingAndCleanUp = () => {
+      setTrackMouse(false);
+      document.removeEventListener('mousemove', updateSliderHandlePosition);
+    };
+
+    document.addEventListener('mousemove', updateSliderHandlePosition);
+    document.addEventListener('mouseup', stopTrackingAndCleanUp);
+
+    return () => {
+      document.removeEventListener('mouseup', stopTrackingAndCleanUp);
+    };
+  }, [trackMouse]);
 
   const sliderProgressWidth = calculateProgressWidth({
     min,
